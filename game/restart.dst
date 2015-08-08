@@ -70,6 +70,7 @@ fi
 # In any case, we'd better not proceed.
 if [ ! -e netmush ]; then
   echo "I don't see $GAMEDIR/netmush. Did you remember to make install?"
+  echo "If so, please run the restart script in the deploy/default/ directory."
   exit 1
 fi
 
