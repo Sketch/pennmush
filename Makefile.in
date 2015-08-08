@@ -35,6 +35,8 @@ SHELL=/bin/sh
 GLOBAL_INSTALL=@libexecdir@
 # Name of the directory that holds installed games
 SERVERS=servers
+# Name of the default game installation directory
+GAMEDIR=$(SERVERS)/default
 
 all: config.h options.h autogen game/mush.cnf
 	@echo "Making all in src."
@@ -79,7 +81,7 @@ $(SERVERS):
 	-rm -f game/netmush
 	mkdir $(SERVERS)
 
-$(SERVERS)/default: $(SERVERS)
+$(GAMEDIR): $(SERVERS)
 	$(CP) -R game $(SERVERS)/default
 
 install: localized all $(SERVERS)/default
@@ -140,31 +142,26 @@ indent:
 customize: update-conf
 	-@@PERL@ utils/customize.pl
 
-# The default place to find the runtime files is in this directory,
-# but it can be overridden with env variables so people can use
-# other game directories.
-GAMEDIR=game
-
 update-conf: $(GAMEDIR)/mush.cnf $(GAMEDIR)/alias.cnf $(GAMEDIR)/restrict.cnf $(GAMEDIR)/names.cnf
 
-$(GAMEDIR)/alias.cnf: game/aliascnf.dst
+$(GAMEDIR)/alias.cnf: $(GAMEDIR) game/aliascnf.dst
 	-@@TOUCH@ game/aliascnf.dst
 	-@@PERL@ utils/update-cnf.pl $(GAMEDIR)/alias.cnf game/aliascnf.dst
 
-$(GAMEDIR)/restrict.cnf: game/restrictcnf.dst
+$(GAMEDIR)/restrict.cnf: $(GAMEDIR) game/restrictcnf.dst
 	-@@TOUCH@ game/restrictcnf.dst
 	-@@PERL@ utils/update-cnf.pl $(GAMEDIR)/restrict.cnf game/restrictcnf.dst
 
-$(GAMEDIR)/names.cnf: game/namescnf.dst
+$(GAMEDIR)/names.cnf: $(GAMEDIR) game/namescnf.dst
 	if [ ! -f $(GAMEDIR)/names.cnf ]; then \
 		$(CP) game/namescnf.dst $(GAMEDIR)/names.cnf \
 	fi
 
-$(GAMEDIR)/mush.cnf: game/mushcnf.dst
+$(GAMEDIR)/mush.cnf: $(GAMEDIR) game/mushcnf.dst
 	-@@TOUCH@ game/mushcnf.dst
 	-@@PERL@ utils/update-cnf.pl $(GAMEDIR)/mush.cnf game/mushcnf.dst
 
-$(GAMEDIR)/restart: game/restart.dst
+$(GAMEDIR)/restart: $(GAMEDIR) game/restart.dst
 	-@if [ ! -f $(GAMEDIR)/restart ]; then $(CP) game/restart.dst $(GAMEDIR)/restart; fi
 
 update: update-hdr update-conf $(GAMEDIR)/restart
