@@ -82,14 +82,14 @@ $(SERVERS):
 	mkdir $(SERVERS)
 
 $(GAMEDIR): $(SERVERS)
-	$(CP) -R game $(SERVERS)/default
+	$(CP) -R game $(GAMEDIR)
 
-install: localized all $(SERVERS)/default
-	-rm -f $(SERVERS)/default/netmush
-	-rm -f $(SERVERS)/default/info_slave
-	-rm -f $(SERVERS)/default/ssl_slave
-	(cd $(SERVERS)/default; $(INSTALL_LINKS))
-	(cd $(SERVERS)/default/txt; make)
+install: localized all $(GAMEDIR)
+	-rm -f $(GAMEDIR)/netmush
+	-rm -f $(GAMEDIR)/info_slave
+	-rm -f $(GAMEDIR)/ssl_slave
+	(cd $(GAMEDIR); $(INSTALL_LINKS))
+	(cd $(GAMEDIR)/txt; make)
 	@echo "If you plan to or do run multiple MUSHes, please run 'make customize'."
 
 netmud: 
