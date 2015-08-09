@@ -91,6 +91,7 @@ install: localized all $(GAMEDIR)
 	(cd $(GAMEDIR); $(INSTALL_LINKS))
 	(cd $(GAMEDIR)/txt; make)
 	@echo "If you plan to or do run multiple MUSHes, please run 'make customize'."
+	@echo "Otherwise, cd servers/default/ , edit the .cnf files, and ./restart"
 
 netmud: 
 	(cd src; make netmud "CC=$(CC)" "CCFLAGS=$(CCFLAGS)" \
