@@ -4,8 +4,6 @@
 # to point to the location of Perl on your system. That shouldn't
 # be necessary if you're running it via 'make customize'
 #
-# customize.pl - Alan Schwartz <dunemush@pennmush.org>
-#
 # This script asks the user for a mush name and makes a copy of the
 # game/ directory called <mush>/. It also rewrites the restart script
 # to <mush>.restart and mush.cnf (which it calls <mush>.cnf) to
