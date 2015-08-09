@@ -38,7 +38,7 @@ SERVERS=servers
 # Name of the default game installation directory
 GAMEDIR=$(SERVERS)/default
 
-all: config.h options.h autogen game/mush.cnf
+all: config.h options.h autogen $(GAMEDIR)/mush.cnf
 	@echo "Making all in src."
 	(cd src; @MAKE@ all "CC=$(CC)" "CCFLAGS=$(CCFLAGS)" \
 	"LDFLAGS=$(LDFLAGS)" "CLIBS=$(CLIBS)" "MAKE=$(MAKE)" \
