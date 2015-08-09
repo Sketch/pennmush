@@ -153,8 +153,8 @@ $(GAMEDIR)/restrict.cnf: $(GAMEDIR) game/restrictcnf.dst
 	-@@PERL@ utils/update-cnf.pl $(GAMEDIR)/restrict.cnf game/restrictcnf.dst
 
 $(GAMEDIR)/names.cnf: $(GAMEDIR) game/namescnf.dst
-	if [ ! -f $(GAMEDIR)/names.cnf ]; then \
-		$(CP) game/namescnf.dst $(GAMEDIR)/names.cnf \
+	-@if [ ! -f $(GAMEDIR)/names.cnf ]; then \
+		$(CP) game/namescnf.dst $(GAMEDIR)/names.cnf; \
 	fi
 
 $(GAMEDIR)/mush.cnf: $(GAMEDIR) game/mushcnf.dst
@@ -162,7 +162,9 @@ $(GAMEDIR)/mush.cnf: $(GAMEDIR) game/mushcnf.dst
 	-@@PERL@ utils/update-cnf.pl $(GAMEDIR)/mush.cnf game/mushcnf.dst
 
 $(GAMEDIR)/restart: $(GAMEDIR) game/restart.dst
-	-@if [ ! -f $(GAMEDIR)/restart ]; then $(CP) game/restart.dst $(GAMEDIR)/restart; fi
+	-@if [ ! -f $(GAMEDIR)/restart ]; then \
+		$(CP) game/restart.dst $(GAMEDIR)/restart; \
+	fi
 
 update: update-hdr update-conf $(GAMEDIR)/restart
 
