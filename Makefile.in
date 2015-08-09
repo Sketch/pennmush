@@ -163,7 +163,9 @@ $(GAMEDIR)/mush.cnf: game/mushcnf.dst
 	-@@PERL@ utils/update-cnf.pl $(GAMEDIR)/mush.cnf game/mushcnf.dst
 
 $(GAMEDIR)/restart: game/restart.dst
-	-@if [ ! -f $(GAMEDIR)/restart ]; then $(CP) game/restart.dst $(GAMEDIR)/restart; fi
+	-@if [ ! -f $(GAMEDIR)/restart ]; \
+		then $(CP) game/restart.dst $(GAMEDIR)/restart; \
+	fi
 
 update: update-hdr update-conf game/restart
 
