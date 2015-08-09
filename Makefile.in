@@ -34,7 +34,7 @@ SHELL=/bin/sh
 # Where to install with 'make globalinstall'
 GLOBAL_INSTALL=@libexecdir@
 
-all: config.h options.h autogen game/mush.cnf
+all: config.h options.h autogen $(GAMEDIR)/mush.cnf
 	@echo "Making all in src."
 	(cd src; @MAKE@ all "CC=$(CC)" "CCFLAGS=$(CCFLAGS)" \
 	"LDFLAGS=$(LDFLAGS)" "CLIBS=$(CLIBS)" "MAKE=$(MAKE)" \
@@ -50,7 +50,7 @@ config.h: configure
 	@exit 1
 
 options.h: options.h.dist
-	@echo "Please use 'make update' to set/update your MUSH configuration in options.h and the game/*.cnf files. This will also create game/restart."
+	@echo "Please use 'make update' to set/update your MUSH configuration in options.h and the $(GAMEDIR)/*.cnf files. This will also create $(GAMEDIR)/restart."
 	@exit 1
 
 autogen: hdrs/cmds.h hdrs/funs.h hdrs/switches.h hdrs/gitinfo.h
@@ -74,11 +74,11 @@ hdrs/gitinfo.h: $(wildcard .git/HEAD .git/index)
 	@echo "/* Built at `date +%Y%m%d%H%M%S` */" >> hdrs/gitinfo.h
 
 install: localized all
-	-rm -f game/netmush
-	-rm -f game/info_slave
-	-rm -f game/ssl_slave
-	(cd game; $(INSTALL_LINKS))
-	(cd game/txt; make)
+	-rm -f $(GAMEDIR)/netmush
+	-rm -f $(GAMEDIR)/info_slave
+	-rm -f $(GAMEDIR)/ssl_slave
+	(cd $(GAMEDIR); $(INSTALL_LINKS))
+	(cd $(GAMEDIR)/txt; make)
 	@echo "If you plan to run multiple MUSHes, consider running 'make customize'"
 
 netmud: 
