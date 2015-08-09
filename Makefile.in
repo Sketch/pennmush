@@ -136,14 +136,7 @@ customize: update-conf
 # other game directories.
 GAMEDIR=game
 
-update-conf: game/mushcnf.dst game/aliascnf.dst game/restrictcnf.dst game/namescnf.dst
-	-@@TOUCH@ game/mushcnf.dst
-	-@@PERL@ utils/update-cnf.pl $(GAMEDIR)/mush.cnf game/mushcnf.dst
-	-@@TOUCH@ game/aliascnf.dst
-	-@@PERL@ utils/update-cnf.pl $(GAMEDIR)/alias.cnf game/aliascnf.dst
-	-@@TOUCH@ game/restrictcnf.dst
-	-@@PERL@ utils/update-cnf.pl $(GAMEDIR)/restrict.cnf game/restrictcnf.dst
-	-@if [ ! -f $(GAMEDIR)/names.cnf ]; then $(CP) game/namescnf.dst $(GAMEDIR)/names.cnf; fi
+update-conf: $(GAMEDIR)/mush.cnf $(GAMEDIR)/alias.cnf $(GAMEDIR)/restrict.cnf $(GAMEDIR)/names.cnf
 
 $(GAMEDIR)/alias.cnf: game/aliascnf.dst
 	-@@TOUCH@ game/aliascnf.dst
@@ -167,7 +160,7 @@ $(GAMEDIR)/restart: game/restart.dst
 		then $(CP) game/restart.dst $(GAMEDIR)/restart; \
 	fi
 
-update: update-hdr update-conf game/restart
+update: update-hdr update-conf $(GAMEDIR)/restart
 
 update-hdr:
 	-@@TOUCH@ options.h.dist
