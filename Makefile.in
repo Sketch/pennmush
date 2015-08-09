@@ -154,7 +154,7 @@ $(GAMEDIR)/restrict.cnf: game/restrictcnf.dst
 	-@@PERL@ utils/update-cnf.pl $(GAMEDIR)/restrict.cnf game/restrictcnf.dst
 
 $(GAMEDIR)/names.cnf: game/namescnf.dst
-	if [ ! -f game/names.cnf ]; then \
+	-@if [ ! -f $(GAMEDIR)/names.cnf ]; then \
 		$(CP) game/namescnf.dst $(GAMEDIR)/names.cnf \
 	fi
 
