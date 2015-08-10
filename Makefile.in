@@ -27,14 +27,13 @@ INSTALL=@INSTALL@
 INSTALLDIR=$installdir
 CP=@CP@
 CHMOD=@CHMOD@
-INSTALL_LINKS=@LN_S@ ../src/netmud netmush; @LN_S@ ../src/info_slave info_slave; @LN_S@ ../src/ssl_slave ssl_slave
 
 # stupid SYS V shell
 SHELL=/bin/sh
 # Where to install with 'make globalinstall'
 GLOBAL_INSTALL=@libexecdir@
 
-all: config.h options.h autogen $(GAMEDIR)/mush.cnf
+all: config.h options.h autogen
 	@echo "Making all in src."
 	(cd src; @MAKE@ all "CC=$(CC)" "CCFLAGS=$(CCFLAGS)" \
 	"LDFLAGS=$(LDFLAGS)" "CLIBS=$(CLIBS)" "MAKE=$(MAKE)" \
@@ -50,7 +49,7 @@ config.h: configure
 	@exit 1
 
 options.h: options.h.dist
-	@echo "Please use 'make update' to set/update your MUSH configuration in options.h and the $(GAMEDIR)/*.cnf files. This will also create $(GAMEDIR)/restart."
+	@echo "Please use 'make update' to set/update your MUSH configuration in options.h and the game/*.cnf files. This will also create game/restart."
 	@exit 1
 
 autogen: hdrs/cmds.h hdrs/funs.h hdrs/switches.h hdrs/gitinfo.h
@@ -74,12 +73,14 @@ hdrs/gitinfo.h: $(wildcard .git/HEAD .git/index)
 	@echo "/* Built at `date +%Y%m%d%H%M%S` */" >> hdrs/gitinfo.h
 
 install: localized all
-	-rm -f $(GAMEDIR)/netmush
-	-rm -f $(GAMEDIR)/info_slave
-	-rm -f $(GAMEDIR)/ssl_slave
-	(cd $(GAMEDIR); $(INSTALL_LINKS))
-	(cd $(GAMEDIR)/txt; make)
-	@echo "If you plan to run multiple MUSHes, consider running 'make customize'"
+	-@if [ -f game/mush.cnf ]; then \
+		-@@PERL@ utils/customize.pl; \
+		-@echo "Please return the game/ directory to a pristine state."; \
+	fi
+	-rm -f game/netmush
+	-rm -f game/info_slave
+	-rm -f game/ssl_slave
+	@echo "Now please run 'make customize'."
 
 netmud: 
 	(cd src; make netmud "CC=$(CC)" "CCFLAGS=$(CCFLAGS)" \
@@ -128,39 +129,38 @@ local-files:
 indent:
 	@(cd src; make indent)
 
-customize: update-conf
+customize: update-conf game/restart
 	-@@PERL@ utils/customize.pl
 
-# The default place to find the runtime files is in this directory,
-# but it can be overridden with env variables so people can use
-# other game directories.
-GAMEDIR=game
-
-update-conf: $(GAMEDIR)/mush.cnf $(GAMEDIR)/alias.cnf $(GAMEDIR)/restrict.cnf $(GAMEDIR)/names.cnf
-
-$(GAMEDIR)/alias.cnf: game/aliascnf.dst
+update-conf: game/aliascnf.dst game/restrictcnf.dst game/mushcnf.dst game/names.cnf
+	-@if [ -f game/mush.cnf ]; then \
+		@PERL@ utils/customize.pl; \
+		echo "Please return the game/ directory to a pristine state."; \
+	fi
 	-@@TOUCH@ game/aliascnf.dst
-	-@@PERL@ utils/update-cnf.pl $(GAMEDIR)/alias.cnf game/aliascnf.dst
-
-$(GAMEDIR)/restrict.cnf: game/restrictcnf.dst
 	-@@TOUCH@ game/restrictcnf.dst
-	-@@PERL@ utils/update-cnf.pl $(GAMEDIR)/restrict.cnf game/restrictcnf.dst
-
-$(GAMEDIR)/names.cnf: game/namescnf.dst
-	-@if [ ! -f $(GAMEDIR)/names.cnf ]; then \
-		$(CP) game/namescnf.dst $(GAMEDIR)/names.cnf \
-	fi
-
-$(GAMEDIR)/mush.cnf: game/mushcnf.dst
 	-@@TOUCH@ game/mushcnf.dst
-	-@@PERL@ utils/update-cnf.pl $(GAMEDIR)/mush.cnf game/mushcnf.dst
+	-@if [ -d servers ]; then \
+			for serverdir in ./servers/*; do \
+				@PERL@ utils/update-cnf.pl $${serverdir}/alias.cnf game/aliascnf.dst; \
+				@PERL@ utils/update-cnf.pl $${serverdir}/restrict.cnf game/restrictcnf.dst; \
+				@PERL@ utils/update-cnf.pl $${serverdir}/mush.cnf game/mushcnf.dst; \
+			done; \
+		fi
 
-$(GAMEDIR)/restart: game/restart.dst
-	-@if [ ! -f $(GAMEDIR)/restart ]; \
-		then $(CP) game/restart.dst $(GAMEDIR)/restart; \
-	fi
+game/names.cnf: game/namescnf.dst
+	$(CP) game/namescnf.dst game/names.cnf
 
-update: update-hdr update-conf $(GAMEDIR)/restart
+game/restart: game/restart.dst
+	$(CP) game/restart.dst game/restart
+
+update: update-hdr update-conf game/restart
+	-@if [ -d servers ]; then \
+			for serverdir in ./servers/*/txt; do \
+				cd $${serverdir}; make; cd -; \
+			done; \
+		fi
+
 
 update-hdr:
 	-@@TOUCH@ options.h.dist
