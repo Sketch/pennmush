@@ -34,6 +34,7 @@ hdrs/cmds.h
 hdrs/funs.h
 hdrs/gitinfo.h
 options.h
+servers/
 src/Makefile
 src/cmdlocal.c
 src/flaglocal.c
