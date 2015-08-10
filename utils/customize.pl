@@ -54,6 +54,10 @@ if (system($tar)) {
 }
 print "done.\n";
 
+foreach $file (<$targetdir/*.dst>) {
+  unlink($file) || die "Failed to delete '$file'.";
+}
+
 print "Replacing standard files in $targetdir/txt/hlp with\nlinks to files in game/txt/hlp...";
 chop($curdir = `pwd`);
 foreach $file (<$targetdir/txt/hlp/penn*.hlp>) {
