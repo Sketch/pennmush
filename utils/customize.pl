@@ -74,6 +74,8 @@ print "done.\n";
 
 print "Removing game/mush.cnf so the server cannot be started from game/ directory.\n";
 unlink("$curdir/game/mush.cnf");
+print "Installing restart script.\n";
+copy("$curdir/game/restart.dst", "$targetdir/restart") unless (-e "$targetdir/restart");
 print "Customization complete for $targetdir/\n";
 
 exit 0;
