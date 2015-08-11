@@ -1,4 +1,6 @@
 #!/usr/local/bin/perl
+use File::Copy;
+use File::Copy::Recursive qw(dircopy dirmove);
 #
 # If this script doesn't work for you, try changing the first line
 # to point to the location of Perl on your system. That shouldn't
@@ -6,9 +8,6 @@
 #
 # This script asks the user for a mush name and makes a copy of the
 # game/ directory called servers/<mush>/
-
-$tar1="(cd game; tar cf - .) | (cd ";
-$tar2="; tar xfBp -)";
 
 $serversdir = "servers/";
 
@@ -47,10 +46,13 @@ mkdir($targetdir,0755) unless (-d $targetdir);
 die "Failed to create $targetdir\n" unless (-d $targetdir);
 print "done.\n";
 
-print "Using tar to copy from game/ to $targetdir/...";
-$tar = $tar1 . $targetdir . $tar2;
-if (system($tar)) {
-	die "Failed!\n";
+print "Moving from game/ to $targetdir/...";
+dirmove("game/save", "$targetdir/save");
+dirmove("game/log", "$targetdir/log");
+dirmove("game/data", "$targetdir/data");
+dircopy("game/txt", "$targetdir/txt");
+foreach $file (<game/*>) {
+  copy($file, "$targetdir/");
 }
 print "done.\n";
 
