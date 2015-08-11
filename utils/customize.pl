@@ -81,6 +81,8 @@ foreach $file (<game/*.cnf>) {
 }
 print "\n";
 
+copy("$curdir/game/namescnf.dst", "$targetdir/names.cnf") unless (-e "$targetdir/names.cnf");
+
 print "Installing restart script.\n";
 copy("$curdir/game/restart.dst", "$targetdir/restart") unless (-e "$targetdir/restart");
 chmod(0744,"$targetdir/restart");

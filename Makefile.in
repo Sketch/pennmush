@@ -132,7 +132,7 @@ indent:
 customize: update-conf
 	-@@PERL@ utils/customize.pl
 
-update-conf: game/aliascnf.dst game/restrictcnf.dst game/mushcnf.dst game/names.cnf
+update-conf: game/aliascnf.dst game/restrictcnf.dst game/mushcnf.dst
 	-@if [ -f game/restart ]; then \
 		@PERL@ utils/customize.pl; \
 		echo "Please return the game/ directory to a pristine state."; \
@@ -147,9 +147,6 @@ update-conf: game/aliascnf.dst game/restrictcnf.dst game/mushcnf.dst game/names.
 				@PERL@ utils/update-cnf.pl $${serverdir}/mush.cnf game/mushcnf.dst; \
 			done; \
 		fi
-
-game/names.cnf: game/namescnf.dst
-	$(CP) game/namescnf.dst game/names.cnf
 
 update: update-hdr update-conf
 	-@if [ -d servers ]; then \
