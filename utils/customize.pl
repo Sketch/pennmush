@@ -72,10 +72,18 @@ foreach $binary (@binaries) {
 }
 print "done.\n";
 
-print "Removing game/mush.cnf so the server cannot be started from game/ directory.\n";
-unlink("$curdir/game/mush.cnf");
+
+print "Removing game/restart so the server cannot be started from game/ directory.\n" if (-e "game/restart");
+unlink("game/restart") if (-e "game/restart");
+foreach $file (<game/*.cnf>) {
+  print "Removing '$file'..." if (-e "$file");
+  unlink($file) if (-e "$file");
+}
+print "\n";
+
 print "Installing restart script.\n";
 copy("$curdir/game/restart.dst", "$targetdir/restart") unless (-e "$targetdir/restart");
+chmod(0744,"$targetdir/restart");
 print "Customization complete for $targetdir/\n";
 
 exit 0;

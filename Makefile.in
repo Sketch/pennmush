@@ -73,7 +73,7 @@ hdrs/gitinfo.h: $(wildcard .git/HEAD .git/index)
 	@echo "/* Built at `date +%Y%m%d%H%M%S` */" >> hdrs/gitinfo.h
 
 install: localized all
-	-@if [ -f game/mush.cnf ]; then \
+	-@if [ -f game/restart ]; then \
 		-@@PERL@ utils/customize.pl; \
 		-@echo "Please return the game/ directory to a pristine state."; \
 	fi
@@ -133,7 +133,7 @@ customize: update-conf
 	-@@PERL@ utils/customize.pl
 
 update-conf: game/aliascnf.dst game/restrictcnf.dst game/mushcnf.dst game/names.cnf
-	-@if [ -f game/mush.cnf ]; then \
+	-@if [ -f game/restart ]; then \
 		@PERL@ utils/customize.pl; \
 		echo "Please return the game/ directory to a pristine state."; \
 	fi
