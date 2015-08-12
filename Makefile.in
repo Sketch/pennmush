@@ -77,9 +77,6 @@ install: localized all
 		-@@PERL@ utils/customize.pl; \
 		-@echo "Please return the game/ directory to a pristine state."; \
 	fi
-	-rm -f game/netmush
-	-rm -f game/info_slave
-	-rm -f game/ssl_slave
 	@echo "Now please run 'make customize'."
 
 netmud: 

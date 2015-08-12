@@ -75,13 +75,15 @@ foreach $binary (@binaries) {
 print "done.\n";
 
 
-print "Removing game/restart so the server cannot be started from game/ directory.\n" if (-e "game/restart");
+print "Removing old files...";
+print "removing game/restart so the server cannot be started from game/ directory.\n" if (-e "game/restart");
 unlink("game/restart") if (-e "game/restart");
-foreach $file (<game/*.cnf>) {
-  print "Removing '$file'..." if (-e "$file");
+@remove = (qw(game/netmush game/info_slave game/ssl_slave), <game/*.cnf>);
+foreach $file (@remove) {
+  print "removing '$file'..." if (-e "$file");
   unlink($file) if (-e "$file");
 }
-print "\n";
+print "done\n";
 
 copy("$curdir/game/namescnf.dst", "$targetdir/names.cnf") unless (-e "$targetdir/names.cnf");
 
