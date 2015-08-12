@@ -1,4 +1,4 @@
-# Makefile for PennMUSH 
+# Makefile for PennMUSH
 
 # - System configuration - #
 
@@ -79,7 +79,7 @@ install: localized all
 	fi
 	@echo "Now please run 'make customize'."
 
-netmud: 
+netmud:
 	(cd src; make netmud "CC=$(CC)" "CCFLAGS=$(CCFLAGS)" \
 	"SQL_CFLAGS=$(SQL_CFLAGS)" "SQL_LDFLAGS=$(SQL_LDFLAGS)" \
 	"LDFLAGS=$(LDFLAGS)" "CLIBS=$(CLIBS)" )
@@ -169,7 +169,7 @@ clean:
 	(cd src; make clean)
 	(cd game; rm -f netmush info_slave)
 
-distclean: 
+distclean:
 	(cd hdrs; rm -f *.orig *~ \#* *.rej *.bak funs.h cmds.h gitinfo.h buildinf.h)
 	(cd utils; rm -f *.orig *~ \#* *.rej *.bak mkcmds.sh *.o)
 	(cd game; rm -rf *.log netmush info_slave *.orig *.rej *~ *.bak mush.cnf)
@@ -177,7 +177,7 @@ distclean:
 	(cd game/txt; make clean)
 	(rm -rf .config Makefile config.h config.sh options.h)
 
-totallyclean: distclean 
+totallyclean: distclean
 	(cd hdrs; rm -rf *.rej)
 	(cd src; rm -rf *.rej)
 	-rm -f Makefile
@@ -186,7 +186,7 @@ patch: versions
 	@make-patch-header
 	@make diffs
 
-etags: 
+etags:
 	(cd src; make etags)
 
 ctags:
