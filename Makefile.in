@@ -139,16 +139,20 @@ update-conf: game/aliascnf.dst game/restrictcnf.dst game/mushcnf.dst
 	-@@TOUCH@ game/mushcnf.dst
 	-@if [ -d servers ]; then \
 			for serverdir in ./servers/*; do \
+				echo "Updating cnf files for $${serverdir}"; \
 				@PERL@ utils/update-cnf.pl $${serverdir}/alias.cnf game/aliascnf.dst; \
 				@PERL@ utils/update-cnf.pl $${serverdir}/restrict.cnf game/restrictcnf.dst; \
 				@PERL@ utils/update-cnf.pl $${serverdir}/mush.cnf game/mushcnf.dst; \
+				echo "Done with cnf files for $${serverdir}"; \
 			done; \
 		fi
 
 update: update-hdr update-conf
 	-@if [ -d servers ]; then \
 			for serverdir in ./servers/*/txt; do \
+				echo "Making txt files for $${serverdir}"; \
 				cd $${serverdir}; make; cd -; \
+				echo "Done with txt files for $${serverdir}"; \
 			done; \
 		fi
 
