@@ -24,6 +24,15 @@ letters and numbers in directory names.
 
 END
 
+if (open(my $restart, "<", "game/restart")) {
+  while(my $line = <$restart>) {
+    next unless $line =~ /^PIDFILE=(.*)$/;
+    $pidfile = ($line =~ /^PIDFILE=(.*)$/)[0];
+    die "Your game is still running!\nPlease \@shutdown before running again!\n" if (-e "game/$pidfile");
+  }
+}
+
+
 print "Please enter the name for your directory: ";
 chop($name = <STDIN>);
 
