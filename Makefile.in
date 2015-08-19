@@ -74,9 +74,11 @@ hdrs/gitinfo.h: $(wildcard .git/HEAD .git/index)
 
 install: localized all
 	@if [ -f game/restart ]; then \
-		-@@PERL@ utils/customize.pl; \
+		make migrate-serverdir || exit 2; \
+		echo "Now please run 'make update'."; \
+	else \
+		echo "Successfully installed."; \
 	fi
-	@echo "Now please run 'make customize'."
 
 netmud:
 	(cd src; make netmud "CC=$(CC)" "CCFLAGS=$(CCFLAGS)" \
@@ -128,10 +130,7 @@ indent:
 customize: update-conf
 	-@@PERL@ utils/customize.pl
 
-update-conf: game/aliascnf.dst game/restrictcnf.dst game/mushcnf.dst
-	@if [ -f game/restart ]; then \
-		@PERL@ utils/customize.pl; \
-	fi
+update-conf: migrate-serverdir game/aliascnf.dst game/restrictcnf.dst game/mushcnf.dst
 	-@@TOUCH@ game/aliascnf.dst
 	-@@TOUCH@ game/restrictcnf.dst
 	-@@TOUCH@ game/mushcnf.dst
@@ -208,4 +207,9 @@ globalinstall: install
 	@echo "** Files installed in $(GLOBAL_INSTALL). Feel free to move them."
 	@echo "** You can run $(GLOBAL_INSTALL)/ln-dir.sh to create a user directory,"
 	@echo "** or symlink that to somewhere easier to run. You may wish to strip them."
+
+migrate-serverdir:
+	@if [ -f game/restart ]; then \
+		@PERL@ utils/customize.pl; \
+	fi
 
