@@ -77,10 +77,9 @@ foreach $file (<$targetdir/txt/hlp/penn*.hlp>) {
   symlink("$curdir/game/txt/hlp/$newfile","$targetdir/txt/hlp/$newfile") || die "Failed!\n";
 }
 print "Fixing links...";
-@binaries = qw(netmud info_slave ssl_slave);
-foreach $binary (@binaries) {
-  symlink("$curdir/src/$binary", "$targetdir/$binary");
-}
+symlink("$curdir/src/netmud", "$targetdir/netmush");
+symlink("$curdir/src/info_slave", "$targetdir/info_slave");
+symlink("$curdir/src/ssl_slave", "$targetdir/ssl_slave");
 print "done.\n";
 
 
