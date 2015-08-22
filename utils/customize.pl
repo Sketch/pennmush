@@ -93,7 +93,10 @@ foreach $file (@remove) {
 }
 print "done\n";
 
-copy("$curdir/game/namescnf.dst", "$targetdir/names.cnf") unless (-e "$targetdir/names.cnf");
+@configs = qw(alias mush name restrict);
+foreach $config (@configs) {
+  copy("$curdir/game/${config}cnf.dst", "$targetdir/${config}.cnf") unless (-e "$targetdir/${config}.cnf");
+}
 
 print "Installing restart script.\n";
 copy("$curdir/game/restart.dst", "$targetdir/restart") unless (-e "$targetdir/restart");
