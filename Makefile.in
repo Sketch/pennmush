@@ -39,7 +39,6 @@ all: config.h options.h autogen
 	"LDFLAGS=$(LDFLAGS)" "CLIBS=$(CLIBS)" "MAKE=$(MAKE)" \
 	"MAKEFLAGS=$(MAKEFLAGS)" "SQL_CFLAGS=$(SQL_CFLAGS)" \
 	"SQL_LDFLAGS=$(SQL_LDFLAGS)")
-	@echo "If the make was successful, use 'make install' to install links."
 
 config.h: configure
 	@echo "Looks like your configure has been updated."
@@ -77,7 +76,7 @@ install: localized all
 		make migrate-serverdir || exit 2; \
 		echo "Now please run 'make update'."; \
 	else \
-		echo "Successfully installed."; \
+		echo "Please run 'make customize' to install to a directory."; \
 	fi
 
 netmud:
