@@ -50,7 +50,7 @@ die "Directory '$targetdir' already exists! Aborting!\n" if (-d $targetdir);
 
 print "Making $targetdir...";
 mkdir($serversdir,0755) unless (-e "$serversdir" || -l "$serversdir");
-die "Failed to create $serversdir\n" unless (-e "$serversdir" || -l "$serverdir");
+die "Failed to create $serversdir\n" unless (-e "$serversdir" || -l "$serversdir");
 mkdir($targetdir,0755) unless (-e "$targetdir" || -l "$targetdir");
 die "Failed to create $targetdir\n" unless (-e "$targetdir" || -l "$targetdir");
 print "done.\n";
