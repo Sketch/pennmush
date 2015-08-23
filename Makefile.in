@@ -126,8 +126,8 @@ local-files:
 indent:
 	@(cd src; make indent)
 
-customize: update-conf
-	-@@PERL@ utils/customize.pl
+customize:
+	@@PERL@ utils/customize.pl
 
 update-conf: migrate-serverdir game/aliascnf.dst game/restrictcnf.dst game/mushcnf.dst
 	-@@TOUCH@ game/aliascnf.dst
