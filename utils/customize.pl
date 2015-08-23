@@ -9,7 +9,7 @@ use File::Copy::Recursive qw(dircopy dirmove);
 # This script asks the user for a mush name and makes a copy of the
 # game/ directory called servers/<mush>/
 
-$serversdir = "servers/";
+$serversdir = "servers";
 
 # Interact with the user
 print <<END;
@@ -42,7 +42,7 @@ $name =~ s/ +//g;
 die "Invalid directory: contains a non-alphanumeric character.\n"
 	if ($name =~ /[^A-Za-z0-9_]/);
 
-$targetdir = $serversdir . $name;
+$targetdir = $serversdir . '/' . $name;
 
 die "Directory '$targetdir' already exists! Aborting!\n" if (-d $targetdir);
 
